@@ -1,12 +1,12 @@
 # Traffic-Light-Controller-Using-Verilog-HDL
-Aim
+# Aim
 To design and simulate a traffic light controller using Verilog HDL, and verify its functionality through a testbench in the Vivado 2023.1 simulation environment. The objective is to control the traffic lights for a junction with a specific time-based sequence for Red, Yellow, and Green lights.
 
-Apparatus Required
+# Apparatus Required
 Vivado 2023.1 or equivalent Verilog simulation tool.
 Computer system with a suitable operating system.
 FPGA board (optional for hardware verification).
-Procedure
+# Procedure
 Launch Vivado 2023.1:
 
 Open Vivado and create a new project.
@@ -29,15 +29,13 @@ Save and Document Results:
 
 Capture screenshots of the waveform and save the simulation logs to include in your report.
 
-Verilog Code for Traffic Light Controller
+# Verilog Code for Traffic Light Controller
 
-// traffic_light_controller.v
 module traffic_light_controller (
     input wire clk,
     input wire reset,
-    output reg [2:0] lights  // 3-bit output: [2]=Red, [1]=Yellow, [0]=Green
-);
-    // Define states
+    output reg [2:0] lights  // 3-bit output: [2]=Red, [1]=Yellow, [0]=Green);
+
     typedef enum reg [1:0] {
         GREEN = 2'b00,
         YELLOW = 2'b01,
@@ -47,7 +45,6 @@ module traffic_light_controller (
     state_t current_state, next_state;
     reg [3:0] counter;  // Timer counter
 
-    // State transition based on counter
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             current_state <= GREEN;
@@ -62,7 +59,6 @@ module traffic_light_controller (
         end
     end
 
-    // Next state logic and output control
     always @(*) begin
         case (current_state)
             GREEN: begin
@@ -87,42 +83,31 @@ endmodule
 
 Testbench for Traffic Light Controller
 
-// traffic_light_controller_tb.v
 `timescale 1ns / 1ps
 
 module traffic_light_controller_tb;
 
-    // Inputs
     reg clk;
     reg reset;
 
-    // Outputs
     wire [2:0] lights;
 
-    // Instantiate the Unit Under Test (UUT)
     traffic_light_controller uut (
         .clk(clk),
         .reset(reset),
-        .lights(lights)
-    );
+        .lights(lights));
 
-    // Clock generation
-    always #5 clk = ~clk;  // Toggle clock every 5 ns
+    always #5 clk = ~clk; 
 
-    // Test procedure
     initial begin
-        // Initialize inputs
         clk = 0;
         reset = 1;
 
-        // Release reset after some time
         #10 reset = 0;
 
-        // Run simulation for 100 ns to observe light transitions
         #100 $stop;
     end
 
-    // Monitor outputs
     initial begin
         $monitor("Time=%0t | Lights (R Y G) = %b", $time, lights);
     end
@@ -130,5 +115,5 @@ module traffic_light_controller_tb;
 endmodule
 
 
-Conclusion
+# Conclusion
 In this experiment, a traffic light controller was successfully designed and simulated using Verilog HDL. The design controlled the traffic lights to switch between Green, Yellow, and Red in a cyclic manner based on timing intervals. The testbench verified that the traffic lights followed the correct sequence and timing. The simulation results confirm the correct functionality of the traffic light controller, demonstrating the effectiveness of Verilog HDL in designing FSM-based controllers for real-world applications.
